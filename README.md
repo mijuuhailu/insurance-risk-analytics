@@ -1,157 +1,177 @@
-# Insurance Risk Analytics & Predictive Modeling
+# End-to-End Insurance Risk Analytics & Predictive Modeling
 
 ## Project Overview
 
-This project focuses on performing Exploratory Data Analysis (EDA) on historical auto insurance data from AlphaCare Insurance Solutions (ACIS) in South Africa. The goal is to identify low-risk customer segments, understand claim behavior, and support data-driven pricing and marketing strategies.
+This project focuses on insurance risk analytics and predictive modeling using historical auto insurance data from South Africa. The objective is to identify low-risk customer segments, evaluate portfolio profitability, and develop machine learning models that support risk-based pricing strategies.
 
-The analysis uses historical insurance data covering approximately 18 months (Feb 2014 – Aug 2015).
+The project simulates a real-world insurance analytics workflow, including:
+
+- Exploratory Data Analysis (EDA)
+- Data Version Control (DVC)
+- Statistical Hypothesis Testing
+- Predictive Modeling
+- Model Explainability using SHAP
 
 ---
 
-# Business Objective
+# Business Problem
 
-AlphaCare Insurance Solutions (ACIS) aims to:
+AlphaCare Insurance Solutions (ACIS) aims to optimize its pricing strategy and marketing investments by leveraging historical claims data.
 
-- Optimize insurance pricing strategies
-- Identify profitable customer segments
-- Improve marketing targeting
-- Reduce underwriting risk
-- Move toward analytics-driven decision making
-
-This project explores claim patterns, profitability, and risk drivers using descriptive analytics and visualization techniques.
+The company wants to:
+- Identify profitable low-risk customers
+- Improve underwriting decisions
+- Detect geographic and demographic risk patterns
+- Build predictive pricing models
+- Move toward data-driven insurance pricing
 
 ---
 
 # Dataset Description
 
-The dataset contains information related to:
+The dataset contains approximately 18 months of historical insurance data (Feb 2014 – Aug 2015).
 
-## Policy Information
+## Key Data Categories
+
+### Policy Information
 - UnderwrittenCoverID
 - PolicyID
 
-## Client Information
+### Client Information
 - Gender
 - MaritalStatus
-- Citizenship
 - Language
-- Bank
-- AccountType
+- Citizenship
 
-## Vehicle Information
+### Geographic Information
+- Province
+- PostalCode
+- MainCrestaZone
+
+### Vehicle Information
 - VehicleType
 - make
 - Model
 - RegistrationYear
 - kilowatts
-- cubiccapacity
 - CustomValueEstimate
 
-## Geographic Information
-- Province
-- PostalCode
-- MainCrestaZone
-- SubCrestaZone
-
-## Insurance Plan Information
+### Insurance Plan Information
 - CoverType
-- CoverCategory
 - Product
 - SumInsured
 - CalculatedPremiumPerTerm
 
-## Financial Information
+### Financial Information
 - TotalPremium
 - TotalClaims
 
 ---
 
-# Derived Business Metrics
-
-Two important insurance profitability metrics were created:
+# Business Metrics
 
 ## Loss Ratio
 
-Loss Ratio = TotalClaims / TotalPremium
+Loss Ratio measures portfolio profitability.
 
-This measures portfolio profitability.
+```math
+LossRatio = TotalClaims / TotalPremium
+```
 
 - Loss Ratio < 1 → profitable
 - Loss Ratio > 1 → unprofitable
 
 ## Margin
 
-Margin = TotalPremium − TotalClaims
+```math
+Margin = TotalPremium - TotalClaims
+```
 
-This measures profit contribution per policy.
+This represents profit contribution per policy.
 
 ---
 
-# Exploratory Data Analysis (EDA)
+# Project Tasks
 
-The following analyses were performed:
+## Task 1 — Exploratory Data Analysis (EDA)
 
-## 1. Data Summarization
-- Dataset shape inspection
-- Data type validation
-- Descriptive statistics for numerical variables
-
-## 2. Data Quality Assessment
+Performed:
+- Data summarization
 - Missing value analysis
-- Duplicate checks
-- Date conversion and formatting
+- Univariate analysis
+- Correlation analysis
+- Geographic trend analysis
+- Outlier detection
+- Temporal trend analysis
 
-## 3. Univariate Analysis
-- Histograms for financial variables
-- Distribution analysis
-- Bar charts for categorical features
-
-## 4. Bivariate & Multivariate Analysis
-- Correlation matrix
-- Premium vs Claims scatter plots
-- Loss Ratio comparisons across categories
-
-## 5. Geographic Analysis
-- Province-level risk comparison
-- Regional profitability trends
-
-## 6. Outlier Detection
-- Boxplots for:
-  - TotalClaims
-  - TotalPremium
-  - CustomValueEstimate
-  - LossRatio
-
-## 7. Temporal Trend Analysis
-- Monthly Loss Ratio trends
-- Claim frequency patterns over time
+### Key Findings
+- Portfolio Loss Ratio = 1.048
+- The portfolio was slightly unprofitable overall
+- Significant claim volatility existed over time
+- Gender showed statistically significant claim differences
+- Financial variables exhibited heavy right-skew and outliers
 
 ---
 
-# Key Findings
+## Task 2 — Data Version Control (DVC)
 
-## Portfolio Profitability
-- Overall portfolio Loss Ratio: **1.048**
-- The insurer pays approximately R1.05 in claims for every R1.00 collected in premiums.
-- This suggests the portfolio is slightly unprofitable overall.
+Implemented DVC to ensure:
+- Reproducibility
+- Dataset versioning
+- Auditability
 
-## Geographic Risk
-- Gauteng showed the highest Loss Ratio.
-- Northern Cape showed the lowest Loss Ratio.
-- Significant regional differences in risk exposure were observed.
+### DVC Workflow
+- Initialized DVC
+- Configured local remote storage
+- Tracked raw and cleaned datasets
+- Versioned datasets using `.dvc` files
 
-## Temporal Trends
-- Monthly Loss Ratios fluctuated substantially over time.
-- Certain periods experienced unusually high claim severity.
+---
 
-## Correlation Insights
-- TotalClaims and LossRatio showed moderate positive correlation.
-- Margin had a strong negative relationship with claims.
-- Premiums alone did not strongly predict claims.
+## Task 3 — A/B Hypothesis Testing
 
-## Outliers
-- Financial variables were heavily right-skewed.
-- Extreme claim values and vehicle values were identified.
+Performed statistical testing on:
+- Province risk differences
+- Zip code risk differences
+- Gender risk differences
+
+### Statistical Tests Used
+- T-Test
+- Chi-Square Test
+
+### Key Results
+
+| Hypothesis | P-Value | Decision |
+|---|---|---|
+| Province Risk Difference | 0.062 | Fail to Reject H₀ |
+| Zip Code Risk Difference | 0.546 | Fail to Reject H₀ |
+| Gender Risk Difference | 0.004 | Reject H₀ |
+
+### Business Insight
+Gender demonstrated statistically significant differences in insurance risk behavior.
+
+---
+
+## Task 4 — Statistical Modeling & Risk-Based Pricing
+
+Built predictive models for claim severity estimation.
+
+### Models Implemented
+- Linear Regression
+- Random Forest Regressor
+- XGBoost Regressor
+
+### Evaluation Metrics
+- RMSE
+- R² Score
+
+### Feature Engineering
+- VehicleAge
+- LossRatio
+- Claim Indicator
+
+### Explainability
+Used SHAP analysis to identify the most influential features affecting claim predictions.
 
 ---
 
@@ -162,16 +182,49 @@ The following analyses were performed:
 - NumPy
 - Matplotlib
 - Seaborn
+- Scikit-learn
+- XGBoost
+- SHAP
+- DVC
+- Git & GitHub
 - Jupyter Notebook
 
 ---
 
-# Visualizations Created
+# Project Structure
 
-The project includes:
-- Loss Ratio by Province
-- Monthly Loss Ratio Trend
-- Correlation Heatmap
-- Boxplots for Outlier Detection
-- Premium vs Claims Scatter Plot
-- Vehicle Risk Comparisons
+```text
+insurance-risk-analytics/
+│
+├── data/
+│   ├── raw/
+│   └── processed/
+│
+├── notebooks/
+│   ├── eda.ipynb
+│   ├── hypothesis_testing.ipynb
+│   └── modeling.ipynb
+│
+├── src/
+│   ├── hypothesis_tests.py
+│   └── modeling.py
+│
+├── .dvc/
+├── README.md
+└── requirements.txt
+```
+
+---
+
+# Future Improvements
+
+Potential next steps include:
+- Hyperparameter tuning
+- Advanced feature engineering
+- Fraud detection models
+- Deep learning approaches
+- Real-time pricing systems
+- Deployment using FastAPI or Streamlit
+
+---
+
